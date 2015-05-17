@@ -1,0 +1,3 @@
+SET price 99.99
+SET color red
+SET unit Celsius
