@@ -3,7 +3,7 @@ gopipe-redis is a small utility written in Go to generate a file for mass insert
 
 ###Installation
 ```
-$ go get
+$ go get github.com/duncanleo/gopipe-redis
 ```
 
 ###Usage
