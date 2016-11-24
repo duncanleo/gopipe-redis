@@ -1,4 +1,6 @@
 # gopipe-redis
+[![Build Status](https://travis-ci.org/duncanleo/gopipe-redis.svg?branch=master)](https://travis-ci.org/duncanleo/gopipe-redis)
+
 gopipe-redis is a small utility written in Go to generate a file for mass insertion into the key-value store Redis. It takes in a source file written using the human-readable Redis syntax.
 
 ### Installation
