@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"bufio"
+	"fmt"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -28,7 +28,7 @@ func readLines(path string) ([]string, error) {
 //Exists reports whether the named file or directory exists.
 func Exists(name string) bool {
 	if _, err := os.Stat(name); err != nil {
-	if os.IsNotExist(err) {
+		if os.IsNotExist(err) {
 			return false
 		}
 	}
@@ -43,27 +43,17 @@ func main() {
 
 	//Source filename
 	source_filename := args[0]
-	//Result filename
-	result_filename := fmt.Sprintf("%s.result.txt", source_filename)
 
-	fmt.Println("Reading lines from source")
+	if !Exists(source_filename) {
+		log.Fatal("Specified filename does not exist")
+	}
+
 	//Read the lines of the source file into a slice
 	lines, er := readLines(source_filename)
 	if er != nil {
 		log.Fatal(er)
 	}
 
-	if Exists(result_filename) {
-		log.Fatal("Resulting filename exists: ", result_filename)
-	}
-
-	fmt.Println("Proceeding to create result...")
-	f, err := os.OpenFile(result_filename, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
-	defer f.Close()
-	if err != nil {
-		return
-	}
-	w := bufio.NewWriter(f)
 	for _, line := range lines {
 		words := strings.Split(line, " ")
 		statement := fmt.Sprintf("*%d\r\n", len(words))
@@ -71,11 +61,6 @@ func main() {
 			word := words[i]
 			statement += fmt.Sprintf("$%d\r\n%s\r\n", len(word), word)
 		}
-		w.WriteString(statement)
+		fmt.Print(statement)
 	}
-	w.Flush()
-	
-	fmt.Println("Result created:", result_filename)
-	//Part ways amicably
-	fmt.Println("Have a good day!")
 }
