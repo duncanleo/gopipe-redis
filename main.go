@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"flag"
 	"fmt"
 	"log"
@@ -40,6 +41,22 @@ func Exists(name string) bool {
 	return true
 }
 
+func generateRedisScript(lines []string) string {
+	var buffer bytes.Buffer
+
+	for _, line := range lines {
+		words := strings.Split(line, " ")
+		statement := fmt.Sprintf("*%d\r\n", len(words))
+		for i := 0; i < len(words); i++ {
+			word := words[i]
+			statement += fmt.Sprintf("$%d\r\n%s\r\n", len(word), word)
+		}
+		buffer.WriteString(statement)
+	}
+
+	return buffer.String()
+}
+
 func main() {
 	flag.StringVar(&inputFilename, "i", "", "input filename")
 	flag.Parse()
@@ -57,14 +74,5 @@ func main() {
 	if er != nil {
 		log.Fatal(er)
 	}
-
-	for _, line := range lines {
-		words := strings.Split(line, " ")
-		statement := fmt.Sprintf("*%d\r\n", len(words))
-		for i := 0; i < len(words); i++ {
-			word := words[i]
-			statement += fmt.Sprintf("$%d\r\n%s\r\n", len(word), word)
-		}
-		fmt.Print(statement)
-	}
+	fmt.Printf(generateRedisScript(lines))
 }
