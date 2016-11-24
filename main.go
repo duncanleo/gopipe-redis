@@ -2,10 +2,15 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
 	"strings"
+)
+
+var (
+	inputFilename string
 )
 
 // readLines reads a whole file into memory
@@ -36,20 +41,19 @@ func Exists(name string) bool {
 }
 
 func main() {
-	args := os.Args[1:]
-	if len(args) != 1 {
-		log.Fatal("Wrong number of arguments!")
+	flag.StringVar(&inputFilename, "i", "", "input filename")
+	flag.Parse()
+
+	if len(inputFilename) == 0 {
+		log.Fatal("Please specify an input filename using the -i option")
 	}
 
-	//Source filename
-	source_filename := args[0]
-
-	if !Exists(source_filename) {
+	if !Exists(inputFilename) {
 		log.Fatal("Specified filename does not exist")
 	}
 
 	//Read the lines of the source file into a slice
-	lines, er := readLines(source_filename)
+	lines, er := readLines(inputFilename)
 	if er != nil {
 		log.Fatal(er)
 	}
