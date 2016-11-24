@@ -31,8 +31,8 @@ func readLines(path string) ([]string, error) {
 	return lines, scanner.Err()
 }
 
-//Exists reports whether the named file or directory exists.
-func Exists(name string) bool {
+// reports whether the named file or directory exists.
+func exists(name string) bool {
 	if _, err := os.Stat(name); err != nil {
 		if os.IsNotExist(err) {
 			return false
@@ -65,7 +65,7 @@ func main() {
 		log.Fatal("Please specify an input filename using the -i option")
 	}
 
-	if !Exists(inputFilename) {
+	if !exists(inputFilename) {
 		log.Fatal("Specified filename does not exist")
 	}
 
